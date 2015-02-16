@@ -1,5 +1,7 @@
 ## IO Plugins
 
+[![Join the chat at https://gitter.im/rwaldron/io-plugins](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rwaldron/io-plugins?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 (This document is a work in progress)
 
 An IO plugin is any class whose instances implement a [Firmata](https://github.com/jgautier/firmata) compatible interface. 
