@@ -7,6 +7,8 @@
 An IO Plugin is any class whose instances implement a [Firmata](https://github.com/jgautier/firmata) compatible interface. 
 For an in-depth case study of creating an IO plugin, [read about the design and creation of the Galileo-IO Plugin here](http://bocoup.com/weblog/intel-galileo-javascript-nodejs/).
 
+IO Plugins are used extensively by [Johnny-Five](https://github.com/rwaldron/johnny-five) to communicate with non-Arduino based hardware but may also be used independently if desired.
+
 ### Available IO Plugins
 
 The following platform IO Plugins are currently available:
