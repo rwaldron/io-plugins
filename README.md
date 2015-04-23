@@ -22,6 +22,8 @@ The following platform IO Plugins are currently available:
   - [Bean-IO](https://github.com/monteslu/bean-io/)
 - Linino One
   - [Nino-IO](https://github.com/rwaldron/nino-io/)
+- pcDuino
+  - [pcDuino-IO](https://github.com/rwaldron/pcDuino-io/)
 - Pinoccio
   - [Pinoccio-IO](https://github.com/soldair/pinoccio-io/)
 - Raspberry Pi
