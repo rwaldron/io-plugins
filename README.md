@@ -154,6 +154,22 @@ SERVO: 4
 - Create a single `data` event,  invoking `handler` once after a single asynchronous read.
 - A corresponding "I2C-reply-${address}-${register}" event is also emitted
 
+**pingRead(settings, handler)**
+This method is defined solely to handle the needs of `HCSR04` (and similar) components. 
+- No pin mode specified
+- Create a single `data` event,  invoking `handler` once per read, continuously and asynchronously reading.
+- `settings` is an object that includes the following properties and corresponding values: 
+  ```
+  {
+    pin: pin number,
+    value: HIGH,
+    pulseOut: 5   
+  }
+  ```
+- `handler` is called with a duration value, in `microseconds`, which is the result of take a pulsed measurement as required by `HCSR04` (and similar) devices.
+- A corresponding "I2C-reply-${address}-${register}" event is also emitted
+
+
 ### Special Method Definitions
 
 **normalize(pin)**
