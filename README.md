@@ -48,7 +48,7 @@ The plugin must...
 - Be a constructor function that defines a prototype object
 - Be a subclass of [EventEmitter](http://nodejs.org/api/events.html#events_class_events_eventemitter)
 - Initialize instances that must...
-    - asynchronously emit a "connected" event when the connection to a physical device has been made.
+    - asynchronously emit a "connect" event when the connection to a physical device has been made.
     - asynchronously emit a "ready" event when the handshake to the physical device is complete.
     - include a property named `isReady` whose initial value is `false`. `isReady` must be set to `true` in the same or previous execution turn as the the "ready" event is emitted.
         - The process of establishing a connection and becoming "ready" is irrelevant to this document's purposes.
