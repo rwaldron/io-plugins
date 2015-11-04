@@ -14,30 +14,36 @@ IO Plugins are used extensively by [Johnny-Five](https://github.com/rwaldron/joh
 The following platform IO Plugins are currently available:
 
 <!--extract-start:ioplugins-->
-- Beagle Bone Black
+- Arduino StandardFirmata
+  - [Firmata.js](https://github.com/jgautier/firmata)
+- BeagleBone Black
   - [BeagleBone-IO](https://github.com/julianduque/beaglebone-io)
 - Blend Micro
   - [Blend-Micro-IO](https://github.com/noopkat/blend-micro-io)
+- BoardIO (Generic IO Plugin class to make your own!)
+  - [Board-IO](https://github.com/achingbrain/board-io)
+- Electric Imp
+  - [Imp-IO](https://github.com/rwaldron/imp-io/)
 - Intel Galileo, Edison
   - [Galileo-IO](https://github.com/rwaldron/galileo-io/)
+  - [Edison-IO](https://github.com/rwaldron/edison-io/) (This is an alias module to Galileo-IO)
 - LightBlue Bean
   - [Bean-IO](https://github.com/monteslu/bean-io/)
 - Linino One
   - [Nino-IO](https://github.com/rwaldron/nino-io/)
+- Particle Core & Particle Photon
+  - [Particle-IO](https://github.com/rwaldron/particle-io/)
 - pcDuino
   - [pcDuino-IO](https://github.com/rwaldron/pcDuino-io/)
 - Pinoccio
   - [Pinoccio-IO](https://github.com/soldair/pinoccio-io/)
 - Raspberry Pi
   - [Raspi-IO](https://github.com/nebrius/raspi-io)
-- Spark Core
-  - [Spark-IO](https://github.com/rwaldron/spark-io/)
-- Electric Imp
-  - [Imp-IO](https://github.com/rwaldron/imp-io/)
 - RemoteIO (Wrapper to remote control another IO class)
   - [Remote-IO](https://github.com/monteslu/remote-io)
-- BoardIO (Generic IO Plugin class to make your own!)
-  - [Board-IO](https://github.com/achingbrain/board-io)
+- Tessel 2
+  - [Tessel-IO](https://github.com/rwaldron/tessel-io)
+
 
 <!--extract-end:ioplugins-->
 
