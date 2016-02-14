@@ -1,4 +1,4 @@
-## IO Plugins
+# IO Plugins
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rwaldron/io-plugins?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -9,7 +9,7 @@ For an in-depth case study of creating an IO plugin, [read about the design and 
 
 IO Plugins are used extensively by [Johnny-Five](https://github.com/rwaldron/johnny-five) to communicate with non-Arduino based hardware but may also be used independently if desired.
 
-### Available IO Plugins
+## Available IO Plugins
 
 The following platform IO Plugins are currently available:
 
@@ -47,7 +47,7 @@ The following platform IO Plugins are currently available:
 
 <!--extract-end:ioplugins-->
 
-### Minimum Plugin Class Requirements
+## Minimum Plugin Class Requirements
 
 The plugin must...
 
@@ -59,6 +59,7 @@ The plugin must...
     - include a property named `isReady` whose initial value is `false`. `isReady` must be set to `true` in the same or previous execution turn as the the "ready" event is emitted.
         - The process of establishing a connection and becoming "ready" is irrelevant to this document's purposes.
     - include a readonly property named `MODES` whose value is a frozen object containing the following property/values: `{ INPUT: 0, OUTPUT: 1, ANALOG: 2, PWM: 3, SERVO: 4 }` 
+    - include a readonly property named `SERIAL_PORT_IDs` whose value is a frozen object containing key/value pairs that represent a platform independent serial port identification. 
     - include a readonly property named `pins` whose value is an array of pin configuration objects. The indices of the `pins` array must correspond to the pin address integer value, eg. on an Arduino UNO digital pin 0 is at index 0 and analog pin 0 is index 14. See [mock-pins.js](https://github.com/rwaldron/johnny-five/blob/master/test/mock-pins.js) for a complete example.
         - each pin configuration object must contain the following properties and values: 
             - `supportedModes`: an array of modes supported by this pin, eg. 
@@ -75,9 +76,10 @@ The plugin must...
 - If an essential IO feature is not implemented or _cannot_ be implemented, the method _must_ throw. For example, the Raspberry Pi does not support analog inputs, if user code calls through to an `analogRead`, the program must throw as an irrefutable means of indicating non-support.
 - If a non-essential IO feature is not implemented or _cannot_ be implemented, the method _must_ accept the expected arguments and indicate successful completion. For example, if it receives a callback, that callback _must_ be called asynchronously.
 
-### Minimum API Requirements
+## Minimum API Requirements
 
-**pinMode(pin, mode)**
+#### pinMode(pin, mode)
+
 - Set the mode of a specified pin to one of: 
 ```
 INPUT: 0
@@ -86,81 +88,87 @@ ANALOG: 2
 PWM: 3
 SERVO: 4
 ```
-- Pins with "A" prefix that are set to `INPUT` should actually store `ANALOG` (2) on the pin's mode property 
-- In firmata.js and Firmata protocol, `ANALOG` mode is used for reading (input) on analog pins because only a pin address integer is sent over the wire, which means that `A0` is sent as `0`, `A1` as `1` and so on. This creates an ambiguity: which `0` and `1` are we sending, digital or analog? Then, for reporting, analog reads are separated: https://github.com/firmata/arduino/blob/master/examples/StandardFirmata/StandardFirmata.ino#L625-L632 This may not be relevant to all IO-Plugins, they may only need to provide the mode for compatibility and override it in `pinMode`. For Johnny-Five analog sensors to work with an IO Plugin, they need to support the conversion of 2 => 0 or 2 as it's used in firmata.
 
-**analogWrite(pin, value)**
-**pwmWrite(pin, value)** (to supercede `analogWrite`)
-- Ensure pin mode is PWM (3)
-- Ensure PWM capability
-- Accept an 8 bit value (0-255) to write
 
-**digitalWrite(pin, value)**
-- Ensure pin mode is OUTPUT (1)
-- Write HIGH/LOW (single bit: 1 or 0)
+### Writing
 
-**i2cWrite(address, inBytes)**
-- Ensure pin mode is UNKNOWN (99)
-  - Can be transformed
-- `inBytes` is an array of data bytes to write
 
-**i2cWrite(address, register, inBytes)**
-- Ensure pin mode is UNKNOWN (99)
-  - Can be transformed
-- `register` is a single byte
-- `inBytes` is an array of data bytes to write
+#### analogWrite(pin, value)
 
-**i2cWriteReg(address, register, value)**
-- Ensure pin mode is UNKNOWN (99)
-  - Can be transformed
-- `register` is a single byte
-- `value` is a single byte value
+#### pwmWrite(pin, value) (to supercede `analogWrite`)
 
-**servoWrite(pin, value)**
-- Ensure pin mode is SERVO (4)
-  - Can be transformed
-- Ensure PWM capability
-- Accept an 8 bit value (0-255) to write
+- Accept an 8 bit `value` (0-255) that is written to the specified `pin`.
 
-**analogRead(pin, handler)**
-- Ensure pin mode is ANALOG (2)
-  - Can be transformed
-- Create a `data` event stream, invoking `handler` at an implementation independent frequency, however it is recommended that `handler` is called no less than once every 19 milliseconds.
-- A corresponding "analog-read-${pin}" event is also emitted
+#### digitalWrite(pin, value)
 
-**digitalRead(pin, handler)**
-- Ensure pin mode is INPUT (0)
-  - Can be transformed
-- Create a `data` event stream,  invoking `handler` at an implementation independent frequency, however it is recommended that `handler` is called no less than once every 19 milliseconds.
-- A corresponding "digital-read-${pin}" event is also emitted
+- Accept a `value` (0 or 1) that is written to the specified `pin`.
 
-**i2cRead(address, register, bytesToRead, handler)**
-- Ensure pin mode is UNKNOWN (99)
-  - Can be transformed
-- `register` is set prior to, or as part of, the read request.
-- Create a single `data` event,  invoking `handler` once per read, continuously and asynchronously reading.
-- A corresponding "I2C-reply-${address}-${register}" event is also emitted
+#### i2cWrite(address, inBytes)
 
-**i2cRead(address, bytesToRead, handler)**
-- Ensure pin mode is UNKNOWN (99)
-  - Can be transformed
-- Create a single `data` event,  invoking `handler` once per read, continuously and asynchronously reading.
-- A corresponding "I2C-reply-${address}-0" event is also emitted
+- Write the array of `inBytes` to the specified `address`.
 
-**i2cReadOnce(address, register, bytesToRead, handler)**
-- Ensure pin mode is UNKNOWN (99)
-  - Can be transformed
-- `register` is set prior to, or as part of, the read request.
-- Create a single `data` event,  invoking `handler` once after a single asynchronous read.
-- A corresponding "I2C-reply-${address}-0" event is also emitted
+#### i2cWrite(address, register, inBytes)
 
-**i2cReadOnce(address, bytesToRead, handler)**
-- Ensure pin mode is UNKNOWN (99)
-  - Can be transformed
-- Create a single `data` event,  invoking `handler` once after a single asynchronous read.
-- A corresponding "I2C-reply-${address}-${register}" event is also emitted
+- Write the array of `inBytes` to the specified `address` and `register`.
 
-**pingRead(settings, handler)**
+#### i2cWriteReg(address, register, value)
+
+- Write the single `value` to the specified `address` and `register`.
+
+#### serialWrite(portId, inBytes)
+
+- Write the array of `inBytes` to the specified `portId`.
+
+#### servoWrite(pin, value)
+
+- Accept a `value` in degrees (0-180) that is written to the specified `pin`.
+
+### Reading
+
+#### analogRead(pin, handler)
+
+- Initiate a new data reading process for `pin`
+- The recommended new data reading frequency is greater than or equal to 200Hz. Read cycles may reduce to 50Hz per platform capability, but no less.
+- Invoke `handler` for all new data reads, with a single argument which is the present `value` read from the `pin`.
+- A corresponding `analog-read-${pin}` event is created and emitted for all new data reads, with a single argument which is the present `value` read from the `pin` (This can be used to invoke `handler`).
+
+#### digitalRead(pin, handler)
+
+- Initiate a new data reading process for `pin`
+- The recommended new data reading frequency is greater than or equal to 200Hz. Read cycles may reduce to 50Hz per platform capability, but no less. 
+- Invoke `handler` for all new data reads in which the data has changed from the previous data, with a single argument which is the present `value` read from the `pin`.
+- A corresponding `digital-read-${pin}` event is created and emitted for all new data reads in which the data has changed from the previous data, with a single argument which is the present `value` read from the `pin` (This can be used to invoke `handler`).
+
+#### i2cRead(address, register, bytesToRead, handler)
+
+- Initiate a new data reading process for `address` and `register`, requesting the specified number of `bytesToRead`. 
+- The recommended new data reading frequency is greater than or equal to 100Hz. Read cycles may reduce to 50Hz per platform capability, but no less. 
+- Invoke `handler` for all new data reads, with a single argument which is an array containing the bytes read.
+- A corresponding `i2c-reply-${address}-${register}` event is created and emitted for all new data reads, with a single argument which is an array containing the bytes read. (This can be used to invoke `handler`).
+
+#### i2cRead(address, register, bytesToRead, handler)
+
+- Initiate a new data reading process for `address`, requesting the specified number of `bytesToRead`. 
+- The recommended new data reading frequency is greater than or equal to 100Hz. Read cycles may reduce to 50Hz per platform capability, but no less. 
+- Invoke `handler` for all new data reads, with a single argument which is an array containing the bytes read.
+- A corresponding `i2c-reply-${address}` event is created and emitted for all new data reads, with a single argument which is an array containing the bytes read. (This can be used to invoke `handler`).
+
+#### i2cReadOnce(address, register, bytesToRead, handler)
+
+- Initiate a new data reading process for `address` and `register`, for the specified number of `bytesToRead`. 
+- This new data read occurs only once. 
+- Invoke `handler` with a single argument which is an array containing the bytes read.
+- A corresponding `i2c-reply-${address}-${register}` "once" event is created and emitted, with a single argument which is an array containing the bytes read. (This can be used to invoke `handler`).
+
+#### i2cReadOnce(address, bytesToRead, handler)
+
+- Initiate a new data reading process for `address`, requesting the specified number of `bytesToRead`. 
+- This new data read occurs only once. 
+- Invoke `handler` for all new data reads, with a single argument which is an array containing the bytes read.
+- A corresponding `i2c-reply-${address}` event is created and emitted, with a single argument which is an array containing the bytes read. (This can be used to invoke `handler`).
+
+#### pingRead(settings, handler)
+
 This method is defined solely to handle the needs of `HCSR04` (and similar) components. 
 - No pin mode specified
 - Create a single `data` event,  invoking `handler` once per read, continuously and asynchronously reading.
@@ -173,12 +181,106 @@ This method is defined solely to handle the needs of `HCSR04` (and similar) comp
   }
   ```
 - `handler` is called with a duration value, in `microseconds`, which is the result of take a pulsed measurement as required by `HCSR04` (and similar) devices.
-- A corresponding "I2C-reply-${address}-${register}" event is also emitted
+
+
+#### serialRead(portId, handler)
+#### serialRead(portId[, maxBytesToRead], handler)
+
+- Initiate a new data reading process for `portId`, optionally capping the read to the specified `maxBytesToRead`. 
+- The recommended new data reading frequency is greater than or equal to 100Hz. Read cycles may reduce to 50Hz per platform capability, but no less.
+- Invoke `handler` for all new data reads, with a single argument which is an array containing the bytes read.
+- A corresponding `serial-data-${portId}` event is created and emitted for all new data reads, with a single argument which is an array containing the bytes read. (This can be used to invoke `handler`).
+
+
+### Configuring
+
+#### i2cConfig(options)
+
+- `options` is an object that MUST include, at very least, the following properties and corresponding values: 
+  
+  | Property | Description |
+  |----------|-------------|
+  | address  | The address of the I2C component |
+
+- `options` _may_ include any of the common configuration properties: 
+  
+  | Property | Description |
+  |----------|-------------|
+  | bus      | The I2C bus |
+  | port     | The I2C bus port |
+  | delay    | Time µs between setting a register and reading the bus |
+
+- **i2cConfig** will always be called once by every I2C component controller class in Johnny-Five. This means that any setup necessary for a given platform's I2C peripheral capabilities should be done here. 
+  + Examples: 
+    * Firmata.js will negotiate a default register read in µs and a default value for the `stopTX` flag.
+    * Tessel-IO will negotiate the `bus` to use.
+    * Tessel-IO will negotiate the `bus` to use.
+- All options specified by a user program in the instantiation of a component will be forwarded to **i2cConfig**. 
+
+
+#### serialConfig(options)
+
+- Must be called to configure a serial/uart port
+- `options` is an object that MUST include, at very least, the following properties and corresponding values: 
+
+  | Property | Description |
+  |----------|-------------|
+  | portId   | Some value that identifies the serial/uart port to configure |
+
+- `options` _may_ include any of the common configuration properties: 
+  
+  | Property | Description |
+  |----------|-------------|
+  | baud     | The baud rate |
+  | rxPin    | The RX pin |
+  | txPin    | The TX pin |
+
+All options specified by a user program in the instantiation of a component will be forwarded to **serialConfig**. 
+
+
+#### servoConfig(options)
+
+- May be called as an alternative to calling `pinMode(pin, SERVO)`.
+- `options` is an object that MUST include, at very least, the following properties and corresponding values: 
+  
+  | Property | Description |
+  |----------|-------------|
+  | pin      | The pin number/name attached to the servo |
+  | min      | The minimum PWM pulse time |
+  | max      | The maximum PWM pulse time |
+
+
+#### servoConfig(pin, min, max)
+
+- See #servoConfig(options)
+
+
+
+### IO Control
+
+These additions are still pending.
+
+#### serialStop(portId)
+
+- Stop continuous reading of the specified serial `portId`. 
+- This does not close the port, it stops reading it but keeps the port open.
+
+#### serialClose(portId)
+
+- Close the specified serial `portId`.
+
+#### serialFlush(portId)
+
+- Flush the specified serial `portId`. For hardware serial, this waits for the transmission of outgoing serial data to complete. For software serial, this removes any buffered incoming serial data.
+
+
+
 
 
 ### Special Method Definitions
 
-**normalize(pin)**
+#### normalize(pin)
+
 - Define a special method that Johnny-Five will call when normalizing the pin value.
 ```js
 // Examples: 
@@ -192,7 +294,8 @@ io.normalize("A0"); // 14
 
 ### Special Property Definitions
 
-**defaultLed**
+#### defaultLed
+
 - This is the pin address for the board's default, built-in led.
 
 
