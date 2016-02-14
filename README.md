@@ -92,6 +92,7 @@ SERVO: 4
 
 ### Writing
 
+Data writing operations must be executed in order of instruction.
 
 #### analogWrite(pin, value)
 
@@ -124,6 +125,8 @@ SERVO: 4
 - Accept a `value` in degrees (0-180) that is written to the specified `pin`.
 
 ### Reading
+
+All new data read processes must be asynchronous. The following methods must not block the execution process, by any means necessary. The following methods must not return the value of the new data read process.
 
 #### analogRead(pin, handler)
 
