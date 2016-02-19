@@ -249,8 +249,8 @@ All options specified by a user program in the instantiation of a component will
   | Property | Description |
   |----------|-------------|
   | pin      | The pin number/name attached to the servo |
-  | min      | The minimum PWM pulse time |
-  | max      | The maximum PWM pulse time |
+  | min      | The minimum PWM pulse time in microseconds |
+  | max      | The maximum PWM pulse time in microseconds |
 
 
 #### servoConfig(pin, min, max)
