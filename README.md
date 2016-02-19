@@ -246,16 +246,22 @@ All options specified by a user program in the instantiation of a component will
 - May be called as an alternative to calling `pinMode(pin, SERVO)`.
 - `options` is an object that MUST include, at very least, the following properties and corresponding values: 
   
-  | Property | Description |
-  |----------|-------------|
-  | pin      | The pin number/name attached to the servo |
-  | min      | The minimum PWM pulse time in microseconds |
-  | max      | The maximum PWM pulse time in microseconds |
+  | Property | Description | Default | Required |
+  |----------|-------------|---------|----------|
+  | pin      | The pin number/name attached to the servo | | Yes |
+  | min      | The minimum PWM pulse time in microseconds | ✭, ✭✭ | Yes |
+  | max      | The maximum PWM pulse time in microseconds | ✭, ✭✭✭ | Yes |
+
+- ✭ This is platform dependent and should be tested **thoroughly** with as many different servos as possible. 
+- ✭✭ Approximiately between 400 and 600
+- ✭✭✭ Approximately between 2200 and 2400 
+
 
 
 #### servoConfig(pin, min, max)
 
 - See #servoConfig(options)
+- This alternate MUST be supported
 
 
 
