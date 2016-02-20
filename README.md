@@ -22,6 +22,8 @@ The following platform IO Plugins are currently available:
   - [Blend-Micro-IO](https://github.com/noopkat/blend-micro-io)
 - BoardIO (Generic IO Plugin class to make your own!)
   - [Board-IO](https://github.com/achingbrain/board-io)
+- C.H.I.P.
+  - [Chip-IO](https://github.com/sandeepmistry/node-chip-io)
 - Electric Imp
   - [Imp-IO](https://github.com/rwaldron/imp-io/)
 - Intel Galileo, Edison
