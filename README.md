@@ -173,17 +173,23 @@ All new data read processes must be asynchronous. The following methods must not
 #### pingRead(settings, handler)
 
 This method is defined solely to handle the needs of `HCSR04` (and similar) components. 
+
 - No pin mode specified
-- Create a single `data` event,  invoking `handler` once per read, continuously and asynchronously reading.
+- Create a single `data` event, invoking `handler`.
 - `settings` is an object that includes the following properties and corresponding values: 
-  ```
-  {
-    pin: pin number,
-    value: HIGH,
-    pulseOut: 5   
-  }
-  ```
+  
+  | Property | Description | Default | Required |
+  |----------|-------------|---------|----------|
+  | pin      | The pin number/name attached to the servo | | Yes |
+  | value    | `HIGH` or `LOW` | `HIGH` | No |
+  | pulseOut | Time µs for `pulseIn` timeout ✭ | 5 | No |
+
+  - ✭ Only used by Firmata.js/PingFirmata, other platforms may safely ignore, for example: https://github.com/rwaldron/particle-io/blob/master/lib/particle.js#L544-L565 
+
 - `handler` is called with a duration value, in `microseconds`, which is the result of take a pulsed measurement as required by `HCSR04` (and similar) devices.
+
+
+
 
 
 #### serialRead(portId, handler)
