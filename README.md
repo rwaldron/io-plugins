@@ -151,7 +151,7 @@ All new data read processes must be asynchronous. The following methods must not
 - Invoke `handler` for all new data reads, with a single argument which is an array containing the bytes read.
 - A corresponding `i2c-reply-${address}-${register}` event is created and emitted for all new data reads, with a single argument which is an array containing the bytes read. (This can be used to invoke `handler`).
 
-#### i2cRead(address, register, bytesToRead, handler)
+#### i2cRead(address, bytesToRead, handler)
 
 - Initiate a new data reading process for `address`, requesting the specified number of `bytesToRead`. 
 - The recommended new data reading frequency is greater than or equal to 100Hz. Read cycles may reduce to 50Hz per platform capability, but no less. 
