@@ -225,7 +225,6 @@ This method is defined solely to handle the needs of `HCSR04` (and similar) comp
   + Examples: 
     * Firmata.js will negotiate a default register read in µs and a default value for the `stopTX` flag.
     * Tessel-IO will negotiate the `bus` to use.
-    * Tessel-IO will negotiate the `bus` to use.
 - All options specified by a user program in the instantiation of a component will be forwarded to **i2cConfig**. 
 
 
