@@ -33,6 +33,8 @@ The following platform IO Plugins are currently available:
   - [Bean-IO](https://github.com/monteslu/bean-io/)
 - Linino One
   - [Nino-IO](https://github.com/rwaldron/nino-io/)
+- LinuxIO (Extensible Linux IO Plugin class to make your own!)
+  - [Linux-IO](https://github.com/fivdi/linux-io/)
 - Particle Core & Particle Photon
   - [Particle-IO](https://github.com/rwaldron/particle-io/)
 - pcDuino
