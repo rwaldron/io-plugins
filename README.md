@@ -126,7 +126,7 @@ Data writing operations must be executed in order of instruction.
 
 #### servoWrite(pin, value)
 
-- Accept a `value` in degrees (0-180) that is written to the specified `pin`.
+- Accept a `value` that is written to the specified `pin`. If the value is between 0 and 180, it is assumed to be a servo arm position in degrees. If the value is between 180 and 544, it is also assumed to be in degrees and is truncated to 180. If the value is greater than or equal to 544, it is assumed to be a duty cycle in nanoseconds.
 
 ### Reading
 
