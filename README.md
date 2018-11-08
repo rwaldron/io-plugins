@@ -316,7 +316,9 @@ io.normalize("A0"); // 14
 
 - This is the pin address for the board's default, built-in led.
 
+#### name
 
+- A printable version of the name of the IO plugin being used, e.g. "Raspi IO"
 
 ### TODO
 
